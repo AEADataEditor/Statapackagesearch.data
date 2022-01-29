@@ -53,7 +53,7 @@ sysdir
 /* add packages to the macro */
 
 * *** Add required packages from SSC to this list ***
-    local ssc_packages "strip"
+    local ssc_packages "strip filelist"
     // local ssc_packages "estout boottest"
     
     if !missing("`ssc_packages'") {

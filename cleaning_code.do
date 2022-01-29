@@ -1,9 +1,9 @@
 * Preliminaries
+* Read in candidatepackages.xlsx (CP)
 
+include "config.do"
 *Set working directory here
-global rootdir "U:/Documents/AEA_workspace/FunPackageSearch/Statapackagesearch"
-
-ssc install filelist
+global rootdir : pwd
 
 
 * Scan files in subdirectories
@@ -12,40 +12,36 @@ ssc install filelist
 	gen temp="/"
 	egen file_path = concat(dirname temp filename)
 	save `file_list'
-	keep file_path
+	keep file_path dirname
 	
 qui count
 	local total_files = `r(N)'
 	forvalues i=1/`total_files' {
-		local file_`i' = file_path[`i']
+		local file_`i' = dirname[`i']
+		di in red "file_i=file_`i'=`file_`i''"
+		
 	}
 
 * Read in excel file
 forvalues i=1/`total_files' {
-	n di "file_`i'=`file_`i''"
-	global v = "`file_`i''"
+	global v = "`file_`i''/candidatepackages.xlsx"
+	n di "Reading in file=$v"
 	
 	*create new dta file for first instance
 	
-	if `i' == 1 {
-		*tempfile aggCP
+	*tempfile aggCP
 		import excel using $v, clear
-		save $rootdir/aggCP.dta, replace
-	}
-	
-	* Append this .dta with each add'l excel file
-	else {
-		use $rootdir/aggCP.dta
-	    import excel using $v, clear
-		append using $rootdir/aggCP.dta
-		save $rootdir/aggCP.dta, replace
-	}
-	
-}
-	
+* Add column with folder name to each candidatepackages.xlsx files and save as dta
+        gen dirname="`file_`i''"
+		strip dirname, of("$rootdir/Data/") generate(foldername)
+		strip foldername, of("aearep-") generate(folderNumbers)
+		destring folderNumbers, replace
+		local foldernum = folderNumbers[1]
+        save "`file_`i''/candidatepackages_aearep-`foldernum'.dta", replace
+
 
 	*Data cleaning
-	use "$rootdir/aggCP.dta", clear
+
 	drop if A =="(Potential) missing package found"
 	
 	label var A "(Potential) missing package found"
@@ -62,6 +58,26 @@ forvalues i=1/`total_files' {
 	
 	*If column D is missing (cannot determine if package was used or not), replace with value of 2
 	replace confirm_is_used = 2 if missing(confirm_is_used)
+
+
+	if `i' == 1 {
+		save $rootdir/aggCP.dta, replace
+	}
+	
+	* Append this .dta with each add'l excel file
+	else {
+		append using $rootdir/aggCP.dta
+		save $rootdir/aggCP.dta, replace
+	}
+	
+}
+
+
+
+/* Diagnostics */
+
+	use "$rootdir/aggCP.dta", clear
+
 
 	cap log close
 log using $rootdir/summarystats.txt, replace

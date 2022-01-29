@@ -1,9 +1,9 @@
 {smcl}
 {com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}U:/Documents/AEA_workspace/FunPackageSearch/Statapackagesearch/summarystats.txt
+       {txt}log:  {res}/project/summarystats.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}23 Jun 2021, 14:05:24
+ {txt}opened on:  {res}29 Jan 2022, 23:44:28
 {txt}
 {com}. 
 .         *Summary stats

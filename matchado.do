@@ -1,32 +1,11 @@
 clear all
 
 * Preliminaries
-
-local pwd : pwd
-global rootdir "`pwd'"
-
-capture mkdir "$rootdir/ado"
-sysdir set PERSONAL "$rootdir/ado/personal"
-sysdir set PLUS     "$rootdir/ado/plus"
-sysdir set SITE     "$rootdir/ado/site"
-sysdir
-
-/* add packages to the macro */
-
-* *** Add required packages from SSC to this list ***
-    local ssc_packages "strip"
-    // local ssc_packages "estout boottest"
-    
-    if !missing("`ssc_packages'") {
-        foreach pkg in `ssc_packages' {
-            dis "Installing `pkg'"
-            ssc install `pkg', replace
-        }
-    }
+include "config.do"
 
 * Data Cleaning master csv file	
 	
-import delimited "\\rschfs1x\userRS\K-Q\lr397_RS\Documents\AEA_workspace\FunPackageSearch\Statapackagesearch\Data\count_all.csv", clear
+import delimited "${rootdir}/Data/count_all.csv", clear
 
 drop v4-nextup370
 drop if key != "adofile"
@@ -48,31 +27,7 @@ levelsof folderNumbers, local(levels)
 
 save $rootdir/matchado.dta, replace
 
-* Add column with folder name to each candidatepackages.xlsx files and save as dta
 
-*can be commented out once run successfully
-/*
-foreach 1 of local levels {
-	cap import excel \\rschfs1x\userRS\K-Q\lr397_RS\Documents\AEA_workspace\FunPackageSearch\Statapackagesearch\Data\aearep-`1'\candidatepackages.xlsx, clear
-	if _rc ==0 {
-	
-	drop if A =="(Potential) missing package found"
-	
-	label var A "(Potential) missing package found"
-	rename A candidatepkg
-	label var B "Package popularity (rank out of total # of packages)"
-	rename B pkgpopularity
-	label var C "likelihood of false positive based on package popularity"
-	rename C probfalsepos
-	
-	rename D confirm_is_used
-
-	gen foldername = "aearep-`1'"
-	save $rootdir/Data/aearep-`1'/candidatepackages_aearep-`1'.dta, replace
-	}
-
-	}
-*/
 
 * cross refer
 
