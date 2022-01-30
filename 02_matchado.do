@@ -11,6 +11,18 @@ global domain "econ"
 import delimited "${rootdir}/Data/count_all.csv", clear
 
 drop v4-nextup370
+duplicates drop 
+
+preserve
+drop if key == "adofile"
+reshape wide value, i(aearep) j(key) string
+rename valuedocount  docount
+rename valueadocount adocount
+rename valuedolines  dolines
+save $rootdir/aearep-stats.dta, replace
+
+restore
+
 drop if key != "adofile"
 
 replace value = substr(value,1,strlen(value)-4)

@@ -1,4 +1,4 @@
-* 00000002
+* 00000003
 *! version 1.0.0
 * Do not erase or edit this file
 * It is used by Stata to track the ado and help
@@ -49,4 +49,31 @@ d Support: email picard@@netbox.com
 d 
 f f/filelist.ado
 f f/filelist.sthlp
+e
+S http://fmwww.bc.edu/repec/bocode/d
+N distinct.pkg
+D 30 Jan 2022
+U 3
+d 'DISTINCT': module to display distinct values of variables
+d 
+d distinct displays the number of distinct values for each variable
+d in a varlist.  The varlist may include both numeric and string
+d variables.
+d 
+d KW: distinct observations
+d KW: unique values
+d 
+d Requires: Stata version 8.0
+d 
+d 
+d Author: Gary Longton, Fred Hutchinson Cancer Research Center
+d Support: email glongton@@fhcrc.org
+d 
+d Author: Nicholas J. Cox, Durham University
+d Support: email N.J.Cox@@durham.ac.uk
+d 
+d Distribution-Date: 20120321
+d 
+f d/distinct.ado
+f d/distinct.hlp
 e

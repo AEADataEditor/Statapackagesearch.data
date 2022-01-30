@@ -37,7 +37,6 @@ forvalues i=1/`total_files' {
 		strip foldername, of("aearep-") generate(folderNumbers)
 		destring folderNumbers, replace
 		local foldernum = folderNumbers[1]
-        save "`file_`i''/candidatepackages_aearep-`foldernum'.dta", replace
 
 
 	*Data cleaning
@@ -58,6 +57,7 @@ forvalues i=1/`total_files' {
 	
 	*If column D is missing (cannot determine if package was used or not), replace with value of 2
 	replace confirm_is_used = 2 if missing(confirm_is_used)
+    save "`file_`i''/candidatepackages_aearep-`foldernum'.dta", replace
 
 
 	if `i' == 1 {

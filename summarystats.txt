@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/project/summarystats.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}29 Jan 2022, 23:44:28
+ {txt}opened on:  {res}30 Jan 2022, 03:34:01
 {txt}
 {com}. 
 .         *Summary stats
