@@ -3,6 +3,9 @@ clear all
 * Preliminaries
 include "config.do"
 
+* Set this to the corresponding domain that these files are created for
+global domain "econ"
+
 * Data Cleaning master csv file	
 	
 import delimited "${rootdir}/Data/count_all.csv", clear
@@ -78,13 +81,11 @@ if !_rc {
 		di "no candidatepackages.xlsx generated for this issue"
 	}
 	
-	}
-	
+}
+	/* save final file */
 	use `matchresults', clear
-	save "$rootdir/matchresults.dta", replace
 	
 	*Cleaning- collapse into unique packages and count of observations
-	use "$rootdir/matchresults.dta", clear
 	gen uniquepkgs = candidatepkg
 	sort uniquepkgs
 	qui by uniquepkgs : gen dup = cond(_N==1,0,_n)
@@ -95,13 +96,13 @@ if !_rc {
 	drop dup uniquepkgs
 	
 	gsort -frequency
-rename candidatepkg packagename
-rename frequency hits
-gen rank = _n
-order rank hits packagename
+    rename candidatepkg packagename
+    rename frequency hits
+    gen rank = _n
+    order rank hits packagename
 
 	
-	save "$rootdir/matchresults.dta", replace
+	save "$rootdir/p_stats_${domain}.dta", replace
 
 	
 	
